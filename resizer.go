@@ -443,7 +443,13 @@ func imageCalculations(o *Options, inWidth, inHeight int) float64 {
 	switch {
 	// Fixed width and height
 	case o.Width > 0 && o.Height > 0:
-		factor = math.Min(xfactor, yfactor)
+		// By default, we will alterate the image proportion in order to fulfill the resize requirement
+		// This parameter check is not necessary but aim to explain the behaviour we expect regarding resize
+		if o.Crop || !o.Embed {
+			factor = math.Min(xfactor, yfactor)
+		} else {
+			factor = math.Max(xfactor, yfactor)
+		}
 	// Fixed width, auto height
 	case o.Width > 0:
 		if o.Crop {
